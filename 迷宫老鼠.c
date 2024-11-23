@@ -2,139 +2,139 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include<windows.h>
-#define MAX_SIZE 100 // ¶¨ÒåÕ»µÄ×î´óÈİÁ¿
+#define MAX_SIZE 100 // å®šä¹‰æ ˆçš„æœ€å¤§å®¹é‡
 #define EOW 10
 #define COL 10
-// ¶¨ÒåÑÕÉ«³£Á¿
+// å®šä¹‰é¢œè‰²å¸¸é‡
 #define COLOR_RED 12
 #define COLOR_GREEN 10
 #define COLOR_WHITE 15
-// ¶¨ÒåÎ»ÖÃ½á¹¹
+// å®šä¹‰ä½ç½®ç»“æ„
 typedef struct {
     int row;
     int col;
 } position;
 
-// ¶¨ÒåÕ»½á¹¹
+// å®šä¹‰æ ˆç»“æ„
 typedef struct {
-    position data[MAX_SIZE]; // ´æ´¢Õ»ÔªËØµÄÊı×é
-    int top; // Õ»¶¥Ö¸Õë£¬Ö¸ÏòÕ»¶¥ÔªËØ
+    position data[MAX_SIZE]; // å­˜å‚¨æ ˆå…ƒç´ çš„æ•°ç»„
+    int top; // æ ˆé¡¶æŒ‡é’ˆï¼ŒæŒ‡å‘æ ˆé¡¶å…ƒç´ 
 } Stack;
 
-// ³õÊ¼»¯Õ»
+// åˆå§‹åŒ–æ ˆ
 void initializeStack(Stack* s) {
-    s->top = -1; // ³õÊ¼»¯Õ»¶¥Ö¸ÕëÎª-1£¬±íÊ¾Õ»Îª¿Õ
+    s->top = -1; // åˆå§‹åŒ–æ ˆé¡¶æŒ‡é’ˆä¸º-1ï¼Œè¡¨ç¤ºæ ˆä¸ºç©º
 }
 
-// ¼ì²éÕ»ÊÇ·ñÎª¿Õ
+// æ£€æŸ¥æ ˆæ˜¯å¦ä¸ºç©º
 bool StackEmpty(Stack* s) {
     return s->top == -1;
 }
 
-// ¼ì²éÕ»ÊÇ·ñÒÑÂú
+// æ£€æŸ¥æ ˆæ˜¯å¦å·²æ»¡
 bool StackFull(Stack* s) {
     return s->top == MAX_SIZE - 1;
 }
 
-// ÈëÕ»²Ù×÷
+// å…¥æ ˆæ“ä½œ
 bool push(Stack* s, position value) {
     if (StackFull(s)) {
-        printf("Õ»ÂúÁË£¬²»ÄÜÑ¹ÈëÔªËØ£¡\n");
+        printf("æ ˆæ»¡äº†ï¼Œä¸èƒ½å‹å…¥å…ƒç´ ï¼\n");
         return false;
     }
-    s->data[++s->top] = value; // ÏÈÒÆ¶¯Õ»¶¥Ö¸Õë£¬È»ºóÌí¼ÓĞÂÔªËØ
+    s->data[++s->top] = value; // å…ˆç§»åŠ¨æ ˆé¡¶æŒ‡é’ˆï¼Œç„¶åæ·»åŠ æ–°å…ƒç´ 
     return true;
 }
 
-// ³öÕ»²Ù×÷
+// å‡ºæ ˆæ“ä½œ
 bool pop(Stack* s, position* value) {
     if (StackEmpty(s)) {
-        //printf("Õ»¿ÕÁË£¬²»ÄÜµ¯³öÔªËØÁË\n");
+        //printf("æ ˆç©ºäº†ï¼Œä¸èƒ½å¼¹å‡ºå…ƒç´ äº†\n");
         return false;
     }
-    *value = s->data[s->top--]; // ÏÈÈ¡³öÕ»¶¥ÔªËØ£¬È»ºóÒÆ¶¯Õ»¶¥Ö¸Õë
+    *value = s->data[s->top--]; // å…ˆå–å‡ºæ ˆé¡¶å…ƒç´ ï¼Œç„¶åç§»åŠ¨æ ˆé¡¶æŒ‡é’ˆ
     return true;
 }
 
-// »ñÈ¡Õ»¶¥ÔªËØ
+// è·å–æ ˆé¡¶å…ƒç´ 
 bool peek(Stack* s, position* value) {
     if (StackEmpty(s)) {
-        printf("Õ»¿ÕÁË£¬²»´æÔÚÔªËØ\n");
+        printf("æ ˆç©ºäº†ï¼Œä¸å­˜åœ¨å…ƒç´ \n");
         return false;
     }
     *value = s->data[s->top];
     return true;
 }
 
-// ³õÊ¼»¯Î»ÖÃÎªÆğµã
+// åˆå§‹åŒ–ä½ç½®ä¸ºèµ·ç‚¹
 void initializePosition(position* here) {
     here->row = 1;
     here->col = 1;
 }
 
-// ×ß¹ıµÄÎ»ÖÃ·âËø
+// èµ°è¿‡çš„ä½ç½®å°é”
 void closePosition(position* past, int maze[][10]) {
     maze[past->row][past->col] = 1;
 }
 
-// ÖØĞÂ´ò¿ªÔ­Î»ÖÃ
+// é‡æ–°æ‰“å¼€åŸä½ç½®
 void startPosition(position* here, int maze[][10]) {
     maze[here->row][here->col] = 0;
 }
 
-// ÒÆ¶¯·½Ïò
+// ç§»åŠ¨æ–¹å‘
 bool moveDirection(position* here, int maze[][10]) {
     if (maze[here->row + 1][here->col] == 0) {
         here->row++;
         return true;
-    }// ÏòÏÂÒÆ¶¯
+    }// å‘ä¸‹ç§»åŠ¨
     else if (maze[here->row - 1][here->col] == 0) {
         here->row--;
         return true;
-    }// ÏòÉÏÒÆ¶¯
+    }// å‘ä¸Šç§»åŠ¨
     else if (maze[here->row][here->col + 1] == 0) {
         here->col++;
         return true;
-    }// ÏòÓÒÒÆ¶¯
+    }// å‘å³ç§»åŠ¨
     else if (maze[here->row][here->col - 1] == 0) {
         here->col--;
         return true;
-    }// Ïò×óÒÆ¶¯
+    }// å‘å·¦ç§»åŠ¨
     else {
         return false;
     }
 }
 
-// Ö÷Òª³ÌĞò£¬ÕÒµ½»ØÈ¥µÄÂ·
+// ä¸»è¦ç¨‹åºï¼Œæ‰¾åˆ°å›å»çš„è·¯
 void findWay(position* here, position* past, int maze[][10], Stack* path) {
     *past = *here;
     while (here->row != 8 || here->col != 8) {
-        if (moveDirection(here, maze)) {      //Èç¹û¿ÉÒÔÒÆ¶¯µÄ»°
-            closePosition(past, maze);   //½«ÉÏÒ»¸öÎ»ÖÃ¶Â×¡
-            push(path, *past);   //½«×ß¹ıµÄÎ»ÖÃÑ¹Õ»
-            *past = *here;   //³õÊ¼»¯Á½¸öÎ»ÖÃ
+        if (moveDirection(here, maze)) {      //å¦‚æœå¯ä»¥ç§»åŠ¨çš„è¯
+            closePosition(past, maze);   //å°†ä¸Šä¸€ä¸ªä½ç½®å µä½
+            push(path, *past);   //å°†èµ°è¿‡çš„ä½ç½®å‹æ ˆ
+            *past = *here;   //åˆå§‹åŒ–ä¸¤ä¸ªä½ç½®
         }
         else {
-            closePosition(past, maze);   //Èç¹û²»ÄÜ×ß£¬½«¸ÃÎ»ÖÃ¶Â×¡²»×ß
+            closePosition(past, maze);   //å¦‚æœä¸èƒ½èµ°ï¼Œå°†è¯¥ä½ç½®å µä½ä¸èµ°
             position temp;
-            if (pop(path, &temp)) {   //ÉÏÒ»¸öÎ»ÖÃ³öÕ»£¬»ØÍËÖØĞÂ×ß
+            if (pop(path, &temp)) {   //ä¸Šä¸€ä¸ªä½ç½®å‡ºæ ˆï¼Œå›é€€é‡æ–°èµ°
                 *here = temp;   
-                startPosition(here, maze);   //ÉÏÒ»¸öÎ»ÖÃ´ò¿ª
-                *past = *here;  //³õÊ¼»¯
+                startPosition(here, maze);   //ä¸Šä¸€ä¸ªä½ç½®æ‰“å¼€
+                *past = *here;  //åˆå§‹åŒ–
             }
             else {
-                printf("±§Ç¸£¡ÀÏÊó×ß²»³öÃÔ¹¬ÁË\n");
+                printf("æŠ±æ­‰ï¼è€é¼ èµ°ä¸å‡ºè¿·å®«äº†\n");
                 break;
             }
         }
     }
 }
-//ÃÔ¹¬ 0     
+//è¿·å®« 0     
 void printPath(Stack* path, position* here) {
     Stack Result;
     initializeStack(&Result);
     if (!StackEmpty(path)) {
-        printf("ÀÏÊó¿ÉÒÔ×ß³öÃÔ¹¬£¬ÆäÖĞÒ»ÌõÃÔ¹¬ÀÏÊóµÄÂ·¾¶Îª£º\n");
+        printf("è€é¼ å¯ä»¥èµ°å‡ºè¿·å®«ï¼Œå…¶ä¸­ä¸€æ¡è¿·å®«è€é¼ çš„è·¯å¾„ä¸ºï¼š\n");
         while (!StackEmpty(path)) {
             position temp;
             pop(path, &temp);
@@ -169,7 +169,7 @@ void start(char m, int* row, int* col) {
 void input() {
 
 }
-// ÉèÖÃ¿ØÖÆÌ¨ÎÄ±¾ÑÕÉ«
+// è®¾ç½®æ§åˆ¶å°æ–‡æœ¬é¢œè‰²
 void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
@@ -178,7 +178,7 @@ int main() {
     char m = 'm';
     int n;
     int row = 1, col = 2;
-    // ´´½¨ÃÔ¹¬
+    // åˆ›å»ºè¿·å®«
     int maze[10][10] = {
         1,1,1,1,1,1,1,1,1,1,
         1,0,1,1,1,1,1,1,1,1,
@@ -199,14 +199,14 @@ int main() {
     
     while (m != 'Q') {
         system("cls");
-        printf("ÄãÏÖÔÚÕıÔÚ¸ø(%d,%d)´´½¨ÔªËØ\n", row, col);
+        printf("ä½ ç°åœ¨æ­£åœ¨ç»™(%d,%d)åˆ›å»ºå…ƒç´ \n", row, col);
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (i == row && j == col) {
-                    setColor(COLOR_RED); // Í»³öÏÔÊ¾µ±Ç°Î»ÖÃ
+                    setColor(COLOR_RED); // çªå‡ºæ˜¾ç¤ºå½“å‰ä½ç½®
                     printf("X ");
-                    setColor(COLOR_WHITE); // »Ö¸´Ä¬ÈÏÑÕÉ«
+                    setColor(COLOR_WHITE); // æ¢å¤é»˜è®¤é¢œè‰²
                 }
                 else {
                     printf("%d ", maze[i][j]);
@@ -214,7 +214,7 @@ int main() {
             }
             printf("\n");
         }
-        printf("ÇëÊäÈëÄãÒª´´½¨µÄÔªËØ(0-Â·¾¶£¬1-ÕÏ°­Îï):");
+        printf("è¯·è¾“å…¥ä½ è¦åˆ›å»ºçš„å…ƒç´ (0-è·¯å¾„ï¼Œ1-éšœç¢ç‰©):");
         scanf_s(" %d", &n);
         maze[row][col] = n;
         for (int i = 0; i < 10; i++) {
@@ -226,14 +226,14 @@ int main() {
         maze[1][1] = 0;
         maze[8][8] = 0;
         system("cls");
-        printf("ÄãÏÖÔÚÕıÔÚ¸ø(%d,%d)´´½¨ÔªËØ\n", row, col);
+        printf("ä½ ç°åœ¨æ­£åœ¨ç»™(%d,%d)åˆ›å»ºå…ƒç´ \n", row, col);
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (i == row && j == col) {
-                    setColor(COLOR_RED); // Í»³öÏÔÊ¾µ±Ç°Î»ÖÃ
+                    setColor(COLOR_RED); // çªå‡ºæ˜¾ç¤ºå½“å‰ä½ç½®
                     printf("%d ",maze[i][j]);
-                    setColor(COLOR_WHITE); // »Ö¸´Ä¬ÈÏÑÕÉ«
+                    setColor(COLOR_WHITE); // æ¢å¤é»˜è®¤é¢œè‰²
                 }
                 else {
                     printf("%d ", maze[i][j]);
@@ -241,8 +241,8 @@ int main() {
             }
             printf("\n");
         }
-        printf("ÏÖÔÚÇëÊäÈëÒÆ¶¯·½Ïò(A-×ó,D-ÓÒ,W-ÉÏ,S-ÏÂ,Q-½áÊø):");
-        scanf_s(" %c", &m); // ×¢ÒâÇ°ÃæµÄ¿Õ¸ñ£¬ÓÃÓÚºöÂÔ»»ĞĞ·û
+        printf("ç°åœ¨è¯·è¾“å…¥ç§»åŠ¨æ–¹å‘(A-å·¦,D-å³,W-ä¸Š,S-ä¸‹,Q-ç»“æŸ):");
+        scanf_s(" %c", &m); // æ³¨æ„å‰é¢çš„ç©ºæ ¼ï¼Œç”¨äºå¿½ç•¥æ¢è¡Œç¬¦
         start(m, &row, &col);
     }
 
@@ -251,10 +251,10 @@ int main() {
 
 
 
-    // ´´½¨Ò»¸öÕ»±íÊ¾×ß¹ıµÄÂ·¾¶
+    // åˆ›å»ºä¸€ä¸ªæ ˆè¡¨ç¤ºèµ°è¿‡çš„è·¯å¾„
     Stack path;
     initializeStack(&path);
-    // ´´½¨µ±Ç°Î»ÖÃºÍÏÂÒ»Î»ÖÃ
+    // åˆ›å»ºå½“å‰ä½ç½®å’Œä¸‹ä¸€ä½ç½®
     position here;
     initializePosition(&here);
     position past;
@@ -263,16 +263,16 @@ int main() {
     
     
     
-    //´òÓ¡×îÖÕ½á¹û
+    //æ‰“å°æœ€ç»ˆç»“æœ
     system("cls");
-    printf("Äú¹¹½¨µÄ×îÖÕÃÔ¹¬Îª:\n");
+    printf("æ‚¨æ„å»ºçš„æœ€ç»ˆè¿·å®«ä¸º:\n");
 
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
             if (maze[i][j]==0) {
-                setColor(COLOR_RED); // Í»³öÏÔÊ¾µ±Ç°Î»ÖÃ
+                setColor(COLOR_RED); // çªå‡ºæ˜¾ç¤ºå½“å‰ä½ç½®
                 printf("%d ",maze[i][j]);
-                setColor(COLOR_WHITE); // »Ö¸´Ä¬ÈÏÑÕÉ«
+                setColor(COLOR_WHITE); // æ¢å¤é»˜è®¤é¢œè‰²
             }
             else {
                 printf("%d ", maze[i][j]);
